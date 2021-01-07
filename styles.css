@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+}
+
+.treasure-gen {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 2in;
+  font-size:6em;
+}
+
+.input-lvl {
+  display: flex;
+  flex: 1;
+}
+
+.input-lvl select {
+  height: 2in;
+  width: 2in;
+  font-size:6em;
+  align-items: center;
+  justify-content: center;
+}
+
+.output-treasure {
+  display: flex;
+  flex: 2 100%;
+}
