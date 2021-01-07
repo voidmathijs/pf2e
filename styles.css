@@ -1,11 +1,8 @@
-body {
-  margin: 0;
-}
-
 .treasure-gen {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  font-size: 2em;
 }
 
 button {
@@ -13,19 +10,17 @@ button {
   flex: 1;
   align-items: center;
   justify-content: center;
-  height: 2in;
-  font-size:6em;
+  font-size: 1.5em;
 }
 
 .input-lvl {
   display: flex;
   flex: 1;
+  font-size: 1em;
 }
 
 .input-lvl select {
-  height: 2in;
-  width: 2in;
-  font-size:6em;
+  font-size: 1em;
   align-items: center;
   justify-content: center;
 }
@@ -33,4 +28,5 @@ button {
 .output-treasure {
   display: flex;
   flex: 2 100%;
+  font-size: 1em;
 }

@@ -2,24 +2,25 @@ const TreasureGen = {
     template: `
         <div class="treasure-gen">
             <div class="input-lvl">
-                <!--<input type="number" min="1" max="20" />-->
-                <select>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                <select v-model="lvl" @change="generateTreasure()">
+                    <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                    <!--<option v-for="num in [...Array(20).keys()]" value="{{num + 1}}">{{num + 1}}</option>-->
                 </select>
             </div>
-            <button @click="generateTreasure(2, 'Moderate')">Generate</button>
-            <div class="output-treasure">{{ treasure }}</div>
+            <button @click="generateTreasure()">Generate</button>
+            <div class="output-treasure">
+                <ol>
+                    <li v-for="item in treasure" :key="item.Name">{{ item.Name }}</li>
+                </ol>
+            </div>
         </div>
     `,
     data() {
         return {
             allEquipment: [],
             treasureByEnc: [],
-            treasure: ''
+            treasure: [],
+            lvl: 2
         }
     },
     async mounted() {
@@ -27,17 +28,48 @@ const TreasureGen = {
     },
     methods: {
         async init() {
-            let allEquipment = await this.getCsv('equipment', true);
+            let allEquipment = await this.getCsv('equipment2', true);
             console.log(allEquipment[0]);
             this.allEquipment = allEquipment;
 
             let treasureByEnc = await this.getCsv('treasure_by_encounter', true);
             console.log(treasureByEnc[0]);
             this.treasureByEnc = treasureByEnc;
+
+            this.generateTreasure(this.lvl, 'Moderate');
         },
 
-        generateTreasure(lvl, threat) {
-            this.treasure = this.treasureByEnc[lvl - 1][threat];
+        generateTreasure() {
+            let threat = 'Moderate'
+
+            // How much gp are the treasures worth
+            let maxGpStr = this.treasureByEnc[this.lvl - 1][threat].match('[^ ]+')[0];
+            maxGpStr = maxGpStr.replace(',', '')
+            const maxGp = parseFloat(maxGpStr);
+
+            // What level range are we looking at
+            const minLvl = Math.max(this.lvl - 3, 1);    // Ignore lvl 0 stuff
+            const maxLvl = Math.min(this.lvl + 1, 20);
+            let lvlEquip = this.allEquipment.filter(e => e.Level >= minLvl && e.Level <= maxLvl);
+
+            let treasure = [];
+            let gp = 0;
+            for (let i = 0; i < 10; i++) {
+                // Get random item and its price
+                let index = Math.floor(Math.random() * lvlEquip.length)
+                let item = lvlEquip[index];
+                let price = parseFloat(item.Price);
+
+                // Have room for the item?
+                if (gp + price < maxGp * 1.1) {
+                    treasure.push(item);
+                    gp += price;
+                }
+
+                if (gp >= maxGp * 0.9) break;
+            }
+
+            this.treasure = treasure;
         },
 
         async getCsv(filename, hasHeader) {
@@ -53,24 +85,7 @@ const TreasureGen = {
                     }
                 });
             });
-        },
-
-        /**
-         * Returns an array of randomly selected cards.
-         * Warning: has side effect of shuffling the cards array.
-         */
-        shuffleAndSelectRandom(cards = [], count = 10) {
-            if (count > cards.length) throw 'Not enough cards to randomly select';
-            if (count == cards.length) return cards.slice();
-
-            // Select 'count' random cards by shuffling the first 'count' cards.
-            for (let i = 0; i < count; i++) {
-                let rnd = i + Math.floor(Math.random() * (cards.length - i));
-                [cards[rnd], cards[i]] = [cards[i], cards[rnd]];
-            }
-
-            return cards.slice(0, count);
-        },
+        }
     }
 }
 
