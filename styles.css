@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  font-size: 2em;
+  font-size: 1em;
 }
 
 button {
@@ -10,17 +10,17 @@ button {
   flex: 1;
   align-items: center;
   justify-content: center;
-  font-size: 1.5em;
+  font-size: 3em;
 }
 
 .input-lvl {
   display: flex;
   flex: 1;
-  font-size: 1em;
+  /* font-size: 2em; */
 }
 
 .input-lvl select {
-  font-size: 1em;
+  font-size: 3em;
   align-items: center;
   justify-content: center;
 }
@@ -28,5 +28,5 @@ button {
 .output-treasure {
   display: flex;
   flex: 2 100%;
-  font-size: 1em;
+  font-size: 1.5em;
 }

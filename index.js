@@ -4,13 +4,12 @@ const TreasureGen = {
             <div class="input-lvl">
                 <select v-model="lvl" @change="generateTreasure()">
                     <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
-                    <!--<option v-for="num in [...Array(20).keys()]" value="{{num + 1}}">{{num + 1}}</option>-->
                 </select>
             </div>
             <button @click="generateTreasure()">Generate</button>
             <div class="output-treasure">
                 <ol>
-                    <li v-for="item in treasure" :key="item.Name">{{ item.Name }}</li>
+                    <li v-for="item in treasure" :key="item.Name"><a :href="item.Url">{{ item.Name }}</a></li>
                 </ol>
             </div>
         </div>
@@ -20,26 +19,27 @@ const TreasureGen = {
             allEquipment: [],
             treasureByEnc: [],
             treasure: [],
-            lvl: 2
+            lvl: 2,
         }
     },
     async mounted() {
-        await this.init();
+        if (localStorage.lvl) this.lvl = localStorage.lvl;
+        // if (localStorage.seed) this.seed = localStorage.seed;
+
+        let allEquipment = await this.getCsv('equipment2', true);
+        console.log(allEquipment[0]);
+        this.allEquipment = allEquipment;
+
+        let treasureByEnc = await this.getCsv('treasure_by_encounter', true);
+        console.log(treasureByEnc[0]);
+        this.treasureByEnc = treasureByEnc;
+
+        this.generateTreasure(this.lvl, 'Moderate');
     },
     methods: {
-        async init() {
-            let allEquipment = await this.getCsv('equipment2', true);
-            console.log(allEquipment[0]);
-            this.allEquipment = allEquipment;
-
-            let treasureByEnc = await this.getCsv('treasure_by_encounter', true);
-            console.log(treasureByEnc[0]);
-            this.treasureByEnc = treasureByEnc;
-
-            this.generateTreasure(this.lvl, 'Moderate');
-        },
-
         generateTreasure() {
+            localStorage.lvl = this.lvl;
+
             let threat = 'Moderate'
 
             // How much gp are the treasures worth

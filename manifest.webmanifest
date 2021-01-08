@@ -1,0 +1,15 @@
+{
+    "background_color": "purple",
+    "description": "Pathfinder 2E Treasure Generator",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "icon/treasure.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "name": "Pathfinder 2E Treasure Generator",
+    "short_name": "PF2ETG",
+    "start_url": "index.html"
+}
